@@ -1,18 +1,13 @@
 package com.gesac.pub;
 
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import com.gesac.factory.EmployeeDAOFactory;
+import com.gesac.factory.RelationDAOFactory;
+import com.gesac.pojo.Employee;
+import com.gesac.pojo.Relation;
 import com.google.gson.Gson;
-import com.hk.factory.HkeeperDAOFactory;
-import com.hk.factory.ServItemDAOFactory;
-import com.hk.factory.Sitem_hkDAOFactory;
-import com.hk.pojo.HkeeperPOJO;
-import com.hk.pojo.ServItemPOJO;
-import com.hk.pojo.Sitem_hkPOJO;
 
 public class jcbcTest {
 
@@ -20,17 +15,27 @@ public class jcbcTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		List<Sitem_hkPOJO> sihklist = Sitem_hkDAOFactory.getDAOInstance()
-				.finBysiid(2);
-		List<HkeeperPOJO> hklist = new ArrayList<HkeeperPOJO>();
-		for (int i = 0; i < sihklist.size(); i++) {
-			HkeeperPOJO hk = HkeeperDAOFactory.getDAOInstance()
-					.finByhkid(sihklist.get(i).getHkid()).get(0);
-			hk.setHkpic("http://192.168.23.1:8080/housekeeping/" + hk.getHkpic());
-			hklist.add(hk);
+		int leaderid = 6;
+		List<Relation> relations = RelationDAOFactory.getDAOInstance().finAll();
+		for (int i = 0; i < relations.size(); i++) {
+			if (relations.get(i).getLeader() != leaderid) {
+				relations.remove(i);
+				i--;
+			}
+
+		}
+		List<Employee> emplo = new ArrayList<Employee>();
+		List<Employee> employees = EmployeeDAOFactory.getDAOInstance().finAll();
+		for (int i = 0; i < relations.size(); i++) {
+			for (int j = 0; j < employees.size(); j++) {
+				if (relations.get(i).getStaff() == employees.get(j).getEid()) {
+					emplo.add(employees.get(j));
+					break;
+				}
+			}
+
 		}
 		Gson gson = new Gson();
-		String objectToJSON = gson.toJson(hklist);
-        System.out.println(objectToJSON);
+		System.out.println(gson.toJson(emplo));
 	}
 }
