@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.gesac.dao.RelationDAO;
 import com.gesac.pojo.Relation;
-import com.gesac.pojo.Voice;
 
 public class RelationDAOImpl implements RelationDAO {
 

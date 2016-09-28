@@ -5,9 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.gesac.dao.VoiceDAO;
-import com.gesac.dao.impl.EmployeeDAOImpl;
 import com.gesac.dao.impl.VoiceDAOImpl;
-import com.gesac.pojo.Employee;
 import com.gesac.pojo.Voice;
 import com.gesac.pub.GetConnection;
 
@@ -35,8 +33,8 @@ public class VoiceDAOProxy implements VoiceDAO {
 	}
 
 	@Override
-	public boolean doIns(int vid, int eid, Timestamp vtime, String vsrc) {
-		boolean sign = this.impl.doIns(vid, eid, vtime, vsrc);
+	public boolean doIns(int eid, Timestamp vtime, String vsrc) {
+		boolean sign = this.impl.doIns(eid, vtime, vsrc);
 		this.close();
 		return sign;
 		

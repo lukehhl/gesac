@@ -2,7 +2,6 @@ package com.gesac.servlet.android;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,19 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gesac.factory.EmployeeDAOFactory;
-import com.gesac.factory.RelationDAOFactory;
-import com.gesac.pojo.Employee;
-import com.gesac.pojo.Relation;
-import com.gesac.pub.GetLeader;
+import com.gesac.factory.VoiceDAOFactory;
+import com.gesac.pojo.Voice;
 import com.google.gson.Gson;
 
-public class getEmployee extends HttpServlet {
+public class getMission extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public getEmployee() {
+	public getMission() {
 		super();
 	}
 
@@ -54,57 +50,17 @@ public class getEmployee extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		String method = request.getParameter("method");
 
-		if ("getEmployee".equalsIgnoreCase(method)) {
-			int leaderid = Integer.parseInt(request.getParameter("id"));
-			List<Relation> relations = RelationDAOFactory.getDAOInstance().finAll();
-			for (int i = 0; i < relations.size(); i++) {
-				if (relations.get(i).getLeader() != leaderid) {
-					relations.remove(i);
-					i--;
-				}
+		int eid = Integer.parseInt(request.getParameter("eid"));
+		List<Voice> voices = VoiceDAOFactory.getDAOInstance().finAll();
+		for (int i = 0; i < voices.size(); i++) {
+			if (voices.get(i).getEid() != eid) {
+				voices.remove(i);
+				i--;
 			}
-			List<Employee> emplo = new ArrayList<Employee>();
-			List<Employee> employees = EmployeeDAOFactory.getDAOInstance().finAll();
-			for (int i = 0; i < relations.size(); i++) {
-				for (int j = 0; j < employees.size(); j++) {
-					if (relations.get(i).getStaff() == employees.get(j).getEid()) {
-						emplo.add(employees.get(j));
-						break;
-					}
-				}
-
-			}
-			Gson gson = new Gson();
-			out.print(gson.toJson(emplo));
-		} else if ("getLeader".equalsIgnoreCase(method)) {
-			int staffid = Integer.parseInt(request.getParameter("id"));
-			List<Integer> leaders = new ArrayList<Integer>();
-			List<Relation> relations = RelationDAOFactory.getDAOInstance().finAll();
-			Integer leaderid = GetLeader.getLeader(staffid, relations);
-			if (leaderid != null) {
-				leaders.add(leaderid);
-			}
-			for (int i = 0; i < leaders.size(); i++) {
-				Integer id = GetLeader.getLeader(leaders.get(i), relations);
-				if (id != null) {
-					leaders.add(id);
-				}
-			}
-			List<Employee> employees1 = EmployeeDAOFactory.getDAOInstance().finAll();
-			List<Employee> employees2 = new ArrayList<Employee>();
-			for (int i = 0; i < leaders.size(); i++) {
-				for (int j = 0; j < employees1.size(); j++) {
-					if (leaders.get(i) == employees1.get(j).getEid()) {
-						employees2.add(employees1.get(j));
-						break;
-					}
-				}
-			}
-			Gson gson = new Gson();
-			out.print(gson.toJson(employees2));
 		}
+		Gson gson = new Gson();
+		out.print(gson.toJson(voices));
 		out.flush();
 		out.close();
 	}

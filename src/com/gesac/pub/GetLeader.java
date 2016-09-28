@@ -5,7 +5,6 @@ package com.gesac.pub;
 
 import java.util.List;
 
-import com.gesac.factory.RelationDAOFactory;
 import com.gesac.pojo.Relation;
 
 /**
