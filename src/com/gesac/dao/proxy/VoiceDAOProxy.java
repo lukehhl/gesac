@@ -25,6 +25,7 @@ public class VoiceDAOProxy implements VoiceDAO {
 			e.printStackTrace();
 		}
 	}
+
 	@Override
 	public List<Voice> finAll() {
 		List<Voice> list = this.impl.finAll();
@@ -33,11 +34,18 @@ public class VoiceDAOProxy implements VoiceDAO {
 	}
 
 	@Override
-	public boolean doIns(int eid, Timestamp vtime, String vsrc) {
-		boolean sign = this.impl.doIns(eid, vtime, vsrc);
+	public boolean doIns(int eid, Timestamp vtime, Timestamp etime, String vsrc, int vsign) {
+		boolean sign = this.impl.doIns(eid, vtime, etime, vsrc, vsign);
 		this.close();
 		return sign;
-		
+
+	}
+
+	@Override
+	public boolean doDel(int vid) {
+		boolean sign = this.impl.doDel(vid);
+		this.close();
+		return sign;
 	}
 
 }

@@ -89,7 +89,7 @@ public class addMission extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		String imagesrc = null;
-		String eid = null, vtime = null, vsrc = null;
+		String eid = null, vtime = null, etime = null, vsrc = null, vsign = null;
 		// 为解析类提供配置信息
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// 创建解析类的实例
@@ -125,9 +125,15 @@ public class addMission extends HttpServlet {
 					if ("vtime".equalsIgnoreCase(item.getFieldName())) {
 						vtime = item.getString("utf-8").replaceAll("\"", "");
 					}
+					if ("vsign".equalsIgnoreCase(item.getFieldName())) {
+						vsign = item.getString("utf-8").replaceAll("\"", "");
+					}
 				}
 			}
-			VoiceDAOFactory.getDAOInstance().doIns(Integer.parseInt(eid), Timestamp.valueOf(vtime), vsrc);
+			
+			
+			VoiceDAOFactory.getDAOInstance().doIns(Integer.parseInt(eid), Timestamp.valueOf(vtime),
+					Timestamp.valueOf(vtime), vsrc, Integer.parseInt(vsign));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

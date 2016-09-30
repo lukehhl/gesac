@@ -17,7 +17,7 @@ public class VoiceDAOImpl implements VoiceDAO {
 	public VoiceDAOImpl(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public List<Voice> finAll() {
 		List<Voice> list = new ArrayList<Voice>();
@@ -28,9 +28,8 @@ public class VoiceDAOImpl implements VoiceDAO {
 			stat = this.conn.prepareStatement(sql);
 			res = stat.executeQuery();// ÷¥––≤È—Ø”Ôæ‰
 			while (res.next()) {
-				Voice pojo = new Voice(res.getInt("vid"),
-						res.getInt("eid"), res.getTimestamp("vtime"),
-						res.getString("vsrc"));
+				Voice pojo = new Voice(res.getInt("vid"), res.getInt("eid"), res.getTimestamp("vtime"),
+						res.getTimestamp("etime"), res.getString("vsrc"), res.getInt("vsign"));
 				list.add(pojo);
 			}
 		} catch (Exception e) {
@@ -47,15 +46,17 @@ public class VoiceDAOImpl implements VoiceDAO {
 	}
 
 	@Override
-	public boolean doIns(int eid, Timestamp vtime, String vsrc) {
+	public boolean doIns(int eid, Timestamp vtime, Timestamp etime, String vsrc, int vsign) {
 		boolean sign = false;
 		PreparedStatement stat = null;
 		try {
-			String sql = "insert into voice(eid,vtime,vsrc) values(?,?,?)";
+			String sql = "insert into voice(eid,vtime,etime,vsrc,vsign) values(?,?,?,?,?)";
 			stat = this.conn.prepareStatement(sql);
 			stat.setInt(1, eid);
 			stat.setTimestamp(2, vtime);
-			stat.setString(3, vsrc);
+			stat.setTimestamp(3, etime);
+			stat.setString(4, vsrc);
+			stat.setInt(5, vsign);
 			stat.executeUpdate();// ÷¥––≤Â»Î”Ôæ‰
 			sign = true;
 		} catch (Exception e) {
@@ -71,4 +72,26 @@ public class VoiceDAOImpl implements VoiceDAO {
 		return sign;
 	}
 
+	@Override
+	public boolean doDel(int vid) {
+		boolean sign = false;
+		PreparedStatement stat = null;
+		try {
+			String sql = "delete from voice where vid = ?";
+			stat = this.conn.prepareStatement(sql);
+			stat.setInt(1, vid);
+			stat.executeUpdate();// ÷¥––≤Â»Î”Ôæ‰
+			sign = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stat.close();
+				return sign;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return sign;
+	}
 }
