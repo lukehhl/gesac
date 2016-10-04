@@ -11,5 +11,7 @@ public interface VoiceDAO {
 	public boolean doIns(int eid, Timestamp vtime, Timestamp etime, String vsrc, int vsign);
 
 	public boolean doDel(int vid);
+	
+	public boolean finMis(int vid);
 
 }

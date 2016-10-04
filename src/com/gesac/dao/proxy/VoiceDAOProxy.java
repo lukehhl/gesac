@@ -48,4 +48,11 @@ public class VoiceDAOProxy implements VoiceDAO {
 		return sign;
 	}
 
+	@Override
+	public boolean finMis(int vid) {
+		boolean sign = this.impl.finMis(vid);
+		this.close();
+		return sign;
+	}
+
 }

@@ -94,4 +94,27 @@ public class VoiceDAOImpl implements VoiceDAO {
 		}
 		return sign;
 	}
+
+	@Override
+	public boolean finMis(int vid) {
+		PreparedStatement stat = null;
+
+		try {
+			String sql = "update voice set vsign = ? where vid = ?";
+			stat = this.conn.prepareStatement(sql);
+			stat.setInt(1, 1);
+			stat.setInt(2, vid);
+			stat.executeUpdate();// ÷¥––≤È—Ø”Ôæ‰
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				stat.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 }
