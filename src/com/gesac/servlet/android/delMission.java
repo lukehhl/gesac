@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gesac.factory.VoiceDAOFactory;
+import com.gesac.factory.MissionDAOFactory;
 
 public class delMission extends HttpServlet {
 
@@ -45,7 +45,7 @@ public class delMission extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		
 		int vid = Integer.parseInt(request.getParameter("vid"));
-		boolean sign = VoiceDAOFactory.getDAOInstance().doDel(vid);
+		boolean sign = MissionDAOFactory.getDAOInstance().doDel(vid);
 		out.print(sign);
 		
 		out.flush();

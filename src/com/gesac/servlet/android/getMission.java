@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gesac.factory.VoiceDAOFactory;
-import com.gesac.pojo.Voice;
+import com.gesac.factory.MissionDAOFactory;
+import com.gesac.pojo.Mission;
 import com.google.gson.Gson;
 
 public class getMission extends HttpServlet {
@@ -52,7 +52,7 @@ public class getMission extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 
 		int eid = Integer.parseInt(request.getParameter("eid"));
-		List<Voice> voices = VoiceDAOFactory.getDAOInstance().finAll();
+		List<Mission> voices = MissionDAOFactory.getDAOInstance().finAll();
 		for (int i = 0; i < voices.size(); i++) {
 			if (voices.get(i).getEid() != eid) {
 				voices.remove(i);

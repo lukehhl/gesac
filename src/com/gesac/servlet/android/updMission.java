@@ -18,12 +18,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.gesac.factory.MissionDAOFactory;
 
-public class addMission extends HttpServlet {
+public class updMission extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public addMission() {
+	public updMission() {
 		super();
 	}
 
@@ -88,8 +88,8 @@ public class addMission extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		String imagesrc = null;
-		String eid = null, vtime = null, etime = null, vsrc = null, vsign = null, vdes = null
-				,vcustomer = null;
+		String vid = null, eid = null, vtime = null, etime = null, vsrc = null, vsign = null, vdes = null,
+				vcustomer = null;
 		// 为解析类提供配置信息
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// 创建解析类的实例
@@ -104,21 +104,25 @@ public class addMission extends HttpServlet {
 				FileItem item = items.get(i);
 				// isFormField为true，表示这不是文件上传表单域
 				if (!item.isFormField()) {
-					ServletContext sctx = getServletContext();
-					// 获得存放文件的物理路径
-					// upload下的某个文件夹 得到当前在线的用户 找到对应的文件夹
-					String path = sctx.getRealPath("/voice");
-					// 获得文件名
-					String fileName = item.getName();
-					imagesrc = fileName;
-					// 该方法在某些平台(操作系统),会返回路径+文件名
-					fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-					File file = new File(path + "\\" + fileName);
-					if (!file.exists()) {
-						item.write(file);
+					if (!fileIsExists(item.getName())) {
+						ServletContext sctx = getServletContext();
+						// 获得存放文件的物理路径
+						// upload下的某个文件夹 得到当前在线的用户 找到对应的文件夹
+						String path = sctx.getRealPath("/voice");
+						// 获得文件名
+						String fileName = item.getName();
+						// 该方法在某些平台(操作系统),会返回路径+文件名
+						fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+						File file = new File(path + "\\" + fileName);
+						if (!file.exists()) {
+							item.write(file);
+						}
 					}
-					vsrc = "voice/" + imagesrc;
+					vsrc = "voice/" + item.getName();
 				} else {
+					if ("vid".equalsIgnoreCase(item.getFieldName())) {
+						vid = item.getString("utf-8").replaceAll("\"", "");
+					}
 					if ("eid".equalsIgnoreCase(item.getFieldName())) {
 						eid = item.getString("utf-8").replaceAll("\"", "");
 					}
@@ -137,8 +141,8 @@ public class addMission extends HttpServlet {
 				}
 			}
 
-			MissionDAOFactory.getDAOInstance().doIns(Integer.parseInt(eid), vcustomer, vdes, Timestamp.valueOf(vtime),
-					Timestamp.valueOf(vtime), vsrc, Integer.parseInt(vsign));
+			MissionDAOFactory.getDAOInstance().updMission(Integer.parseInt(vid), Integer.parseInt(eid), vcustomer, vdes,
+					Timestamp.valueOf(vtime), Timestamp.valueOf(vtime), vsrc, Integer.parseInt(vsign));
 			System.out.println(vcustomer);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,6 +160,20 @@ public class addMission extends HttpServlet {
 	 */
 	public void init() throws ServletException {
 		// Put your code here
+	}
+
+	public boolean fileIsExists(String filename) {
+		try {
+			File f = new File("/voice" + File.separator + filename);
+			if (!f.exists()) {
+				return false;
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+		return true;
 	}
 
 }

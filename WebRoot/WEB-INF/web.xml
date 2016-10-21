@@ -36,9 +36,16 @@
   <servlet>
     <description>This is the description of my J2EE component</description>
     <display-name>This is the display name of my J2EE component</display-name>
-    <servlet-name>finMission</servlet-name>
-    <servlet-class>com.gesac.servlet.android.finMission</servlet-class>
+    <servlet-name>updMissionState</servlet-name>
+    <servlet-class>com.gesac.servlet.android.updMissionState</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>updMission</servlet-name>
+    <servlet-class>com.gesac.servlet.android.updMission</servlet-class>
+  </servlet>
+
 
 
 
@@ -66,8 +73,12 @@
     <url-pattern>/delMission.do</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>finMission</servlet-name>
-    <url-pattern>/finMission.do</url-pattern>
+    <servlet-name>updMissionState</servlet-name>
+    <url-pattern>/updMissionState.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>updMission</servlet-name>
+    <url-pattern>/updMission.do</url-pattern>
   </servlet-mapping>
 
 </web-app>
